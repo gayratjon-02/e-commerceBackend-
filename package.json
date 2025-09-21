@@ -1,7 +1,7 @@
 {
-  "name": "burak",
+  "name": "e-commerce",
   "version": "1.0.0",
-  "description": "This is Burak project Backend",
+  "description": "This is e-commerce project Backend",
   "main": "src/server.ts",
   "scripts": {
     "start": "ts-node src/server.ts",
