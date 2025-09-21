@@ -45,7 +45,6 @@ class MemberService {
   }
 
   public async login(input: LoginInput): Promise<Member> {
-    // TODO:  consider  member status later
     const member = await this.memberModel
       .findOne(
         {
