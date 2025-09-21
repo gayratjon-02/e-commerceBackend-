@@ -10,7 +10,7 @@ import orderController from "./controllers/order.controller";
 router.get("/member/admin", memberController.getAdmin); 
 
 router.post("/member/login", memberController.login); // call
-router.post("/member/signup", memberController.signup); // call
+router.post("/member/signup", memberController.signup); // call done
 router.post(
   "/member/logout",
   memberController.verifyAuth,
