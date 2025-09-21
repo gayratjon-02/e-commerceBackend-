@@ -9,6 +9,7 @@ import Errors, { HttpCode, Message } from "../libs/types/Errors";
 import { MemberStatus, MemberType } from "../libs/types/enums/member.enum";
 import * as bcrypt from "bcrypt";
 import { shapeIntoMongooseObjectId } from "../libs/types/config";
+import { STATUS_CODES } from "http";
 
 class MemberService {
   private readonly memberModel;
@@ -83,16 +84,53 @@ class MemberService {
     if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
     return result;
   }
-
   public async updateMember(
     member: Member,
     input: MemberUpdateInput
   ): Promise<Member> {
     const memberId = shapeIntoMongooseObjectId(member._id);
+
+    // 1. confirm password check
+    if (input.memberNewPassword !== input.memberConfirmPassword) {
+      throw new Errors(HttpCode.BAD_REQUEST, Message.ENTER_SAME_PASSWORD);
+    }
+
+    // 2. DB dan eski parolni olish
+    const dbMember = await this.memberModel.findById(memberId, {
+      memberPassword: 1,
+    });
+    if (!dbMember || !dbMember.memberPassword) {
+      throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    }
+
+    // 3. eski parolni solishtirish
+    const isMatch = await bcrypt.compare(
+      input.memberPassword as string, // foydalanuvchi kiritgan eski parol (plain)
+      dbMember.memberPassword as string // DB dagi hash
+    );
+    if (!isMatch) {
+      throw new Errors(HttpCode.BAD_REQUEST, Message.WRONG_PASSWORD);
+    }
+
+    // 4. yangi parolni hash qilish
+    const salt = await bcrypt.genSalt();
+    input.memberPassword = await bcrypt.hash(
+      input.memberNewPassword as string,
+      salt
+    );
+
+    // 5. keraksiz fieldlarni olib tashlash
+    delete input.memberNewPassword;
+    delete input.memberConfirmPassword;
+
+    // 6. update qilish
     const result = await this.memberModel
       .findOneAndUpdate({ _id: memberId }, input, { new: true })
       .exec();
-    if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+
+    if (!result) {
+      throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+    }
 
     return result;
   }

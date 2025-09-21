@@ -88,7 +88,7 @@ memberController.logout = (req: ExtendedRequest, res: Response) => {
     else res.status(Errors.standard.code).json(Errors.standard);
   }
 };
-
+// deail::
 memberController.getMemberDetail = async (
   req: ExtendedRequest,
   res: Response
@@ -112,8 +112,10 @@ memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
     console.log("updateMember");
 
     const input: MemberUpdateInput = req.body;
+    // console.log("req.body", req.body);
     if (req.file) input.memberImage = req.file.path.replace(/\\/, "/");
     const result = await memberService.updateMember(req.member, input);
+    // console.log("controller input:", input);
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {

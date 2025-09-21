@@ -15,12 +15,12 @@ router.post(
   "/member/logout",
   memberController.verifyAuth,
   memberController.logout
-);
+); // done
 router.get(
   "/member/detail",
   memberController.verifyAuth,
   memberController.getMemberDetail
-);
+); // done
 
 router.post(
   "/member/update",

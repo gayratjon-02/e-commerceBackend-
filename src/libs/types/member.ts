@@ -41,6 +41,8 @@ export interface MemberUpdateInput {
   memberNick?: string;
   memberPhone?: string;
   memberPassword?: string;
+  memberNewPassword?: string;
+  memberConfirmPassword?: string;
   memberAddreas?: string;
   memberDesc?: string;
   memberImage?: string;
