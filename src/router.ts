@@ -32,8 +32,8 @@ router.post(
 /** Product **/
 // get top products
 
-router.get("/product/top-products", productController.getTopProducts);
-
+router.get("/product/top-products", productController.getTopProducts); // done by likes
+//
 router.get("/product/all", productController.getProducts);
 router.get(
   "/product/:id",

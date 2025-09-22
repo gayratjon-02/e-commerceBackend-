@@ -24,7 +24,7 @@ productController.getTopProducts = async (req: Request, res: Response) => {
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
-};
+}; //done
 
 productController.getProducts = async (req: Request, res: Response) => {
   try {
@@ -40,16 +40,8 @@ productController.getProducts = async (req: Request, res: Response) => {
       inquiry.productCollection = productCollection as ProductCollection;
     }
     if (search) inquiry.search = String(search);
-
     const result = await productService.getProducts(inquiry);
-
     res.status(HttpCode.OK).json(result);
-
-    // const query = req.query;
-    // console.log("query:", query)
-
-    // const params = req.params;
-    // console.log("params:", params)
   } catch (err) {
     console.log("Error getProducts:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
