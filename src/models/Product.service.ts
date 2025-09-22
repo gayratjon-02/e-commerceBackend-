@@ -96,14 +96,13 @@ class ProductService {
     return result;
   }
 
-  public async getTopUsers(): Promise<Product[]> {
+  public async getTopProducts(): Promise<Product[]> {
     const result = await this.productModel
       .find({
         productStatus: ProductStatus.PROCESS,
-        // memberStatus: Prod.ACTIVE,
-        memberLikes: { $gte: -1 },
+        productLikes: { $gte: -1 },
       })
-      .sort({ memberPoints: -1 })
+      .sort({ productLikes: -1 })
       .limit(4)
       .exec();
 

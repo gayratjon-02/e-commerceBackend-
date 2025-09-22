@@ -16,7 +16,7 @@ productController.getTopProducts = async (req: Request, res: Response) => {
   try {
     console.log("getTopProducts");
 
-    const result = await productService.getTopUsers();
+    const result = await productService.getTopProducts();
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {
