@@ -47,7 +47,7 @@ productController.getProducts = async (req: Request, res: Response) => {
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
-};
+}; // done
 
 productController.getProduct = async (req: ExtendedRequest, res: Response) => {
   try {
