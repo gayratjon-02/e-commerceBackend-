@@ -89,7 +89,7 @@ restaurantController.processLogin = async (
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
     res.send(
-      `<script> alert("${message}"): window.location.replace('/admin/login') </script>`
+      `<script> alert("${message}"): window.location.replace('/admin/login')  </script>`
     );
   }
 };
@@ -131,7 +131,7 @@ restaurantController.updateChosenUser = async (req: Request, res: Response) => {
   } catch (err) {
     console.log("Error updateChosenUser:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
-    else res.status(Errors.standard.code).json(Errors.standard)
+    else res.status(Errors.standard.code).json(Errors.standard);
   }
 };
 
@@ -155,6 +155,7 @@ restaurantController.verifyRestaurant = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("Gayratjon", req.session?.member?.memberType);
   if (req.session?.member?.memberType === MemberType.ADMIN) {
     req.member = req.session.member;
     // console.log("req.session: ", req.session.member);
@@ -162,7 +163,7 @@ restaurantController.verifyRestaurant = (
   } else {
     const message = Message.NOT_AUTHENTICATED;
     res.send(
-      `<script> alert("${message}"); window.location.replace('/admin/login'); </script>`
+      `<script> alert("${message}"); window.location.replace('/admin/login'); ss </script>`
     );
   }
 };

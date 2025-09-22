@@ -5,7 +5,7 @@ export enum ProductStatus {
 }
 
 export enum ProductCollection {
-    PHONE = "PHONE",
+  PHONE = "PHONE",
   COMPUTER = "COMPUTER",
   WATCH = "WATCH",
   CAMERA = "CAMERA",

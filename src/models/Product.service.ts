@@ -96,6 +96,22 @@ class ProductService {
     return result;
   }
 
+  public async getTopUsers(): Promise<Product[]> {
+    const result = await this.productModel
+      .find({
+        productStatus: ProductStatus.PROCESS,
+        // memberStatus: Prod.ACTIVE,
+        memberLikes: { $gte: -1 },
+      })
+      .sort({ memberPoints: -1 })
+      .limit(4)
+      .exec();
+
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    return result;
+  }
+
   /** SSR */
 
   public async getAllProducts(): Promise<Product[]> {

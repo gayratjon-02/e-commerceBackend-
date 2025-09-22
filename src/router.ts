@@ -7,7 +7,7 @@ import orderController from "./controllers/order.controller";
 
 /** Member **/
 
-router.get("/member/admin", memberController.getAdmin); 
+router.get("/member/admin", memberController.getAdmin);
 
 router.post("/member/login", memberController.login); // call
 router.post("/member/signup", memberController.signup); // call done
@@ -27,11 +27,12 @@ router.post(
   memberController.verifyAuth,
   uploader("members").single("memberImage"),
   memberController.updateMember
-);
-
-router.get("/member/top-users", memberController.getTopUsers);
+); // done
 
 /** Product **/
+// get top products
+
+router.get("/product/top-products", productController.getTopProducts);
 
 router.get("/product/all", productController.getProducts);
 router.get(
