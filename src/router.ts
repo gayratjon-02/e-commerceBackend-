@@ -39,7 +39,7 @@ router.get(
   "/product/:id",
   memberController.retrieveAuth,
   productController.getProduct
-);
+); // done
 
 /** Order **/
 

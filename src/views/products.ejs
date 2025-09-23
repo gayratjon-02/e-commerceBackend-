@@ -37,7 +37,6 @@
                 <th scope="col">T/r</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Product Type</th>
-                <th scope="col">Product Volume</th>
                 <th scope="col">Product Price</th>
                 <th scope="col">Product Left Count</th>
                 <th scope="col">Status</th>
@@ -49,10 +48,7 @@
               <td><%= key + 1 %></td>
               <td><%= value.productName %></td>
               <td><%= value.productCollection %></td>
-              <td>
-                <%= value.productCollection === "DRINK" ? value.productVolume :
-                value.productSize %>
-              </td>
+              
               <td><%= value.productPrice %></td>
               <td><%= value.productLeftCount %></td>
               <td>
@@ -129,10 +125,12 @@
             <div class="half-input">
               <label>Product Type</label>
               <select class="product-collection" name="productCollection">
-                <option value="DISH" selected>Dish</option>
-                <option value="SALAD">Salad</option>
-                <option value="DESSERT">Dessert</option>
-                <option value="DRINK">Drink</option>
+                <option value="PHONE" selected>PHONE</option>
+                <option value="COMPUTER">COMPUTER</option>
+                <option value="CAMERA">CAMERA</option>
+                <option value="HEADPHONE">HEADPHONE</option>
+                <option value="WATCH">WATCH</option>
+                <option value="GAMING">GAMING</option>
                 <option value="OTHER">Other</option>
               </select>
             </div>
