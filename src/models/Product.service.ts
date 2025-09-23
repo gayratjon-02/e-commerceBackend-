@@ -34,8 +34,13 @@ class ProductService {
     if (inquiry.productCollection)
       match.productCollection = inquiry.productCollection;
     const sort: T =
+      // inquiry.order === "productPrice"
+      //   ? { [inquiry.order]: 1 }
+      //   : { [inquiry.order]: -1 };
       inquiry.order === "productPrice"
         ? { [inquiry.order]: 1 }
+        : inquiry.order === "latest"
+        ? { createdAt: -1 }
         : { [inquiry.order]: -1 };
 
     const result = await this.productModel
