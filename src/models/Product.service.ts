@@ -34,14 +34,13 @@ class ProductService {
     if (inquiry.productCollection)
       match.productCollection = inquiry.productCollection;
     const sort: T =
-      // inquiry.order === "productPrice"
-      //   ? { [inquiry.order]: 1 }
-      //   : { [inquiry.order]: -1 };
       inquiry.order === "productPrice"
-        ? { [inquiry.order]: 1 }
+        ? { productPrice: 1 } // pastdan yuqoriga
         : inquiry.order === "latest"
-        ? { createdAt: -1 }
-        : { [inquiry.order]: -1 };
+        ? { createdAt: -1 } // eng so‘ngilari
+        : inquiry.order === "bySold"
+        ? { productSoldCount: -1 } // eng ko‘p sotilganlar
+        : { createdAt: -1 }; // default
 
     const result = await this.productModel
       .aggregate([
@@ -53,6 +52,7 @@ class ProductService {
       .exec();
 
     if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    console.log("result:::", result);
 
     return result;
   }
