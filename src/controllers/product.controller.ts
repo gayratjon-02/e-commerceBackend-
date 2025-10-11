@@ -78,7 +78,7 @@ productController.getAllProducts = async (req: Request, res: Response) => {
     else res.status(Errors.standard.code).json(Errors.standard);
   }
 };
-
+   
 productController.createNewProduct = async (
   req: AdminRequest,
   res: Response
