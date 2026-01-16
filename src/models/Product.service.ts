@@ -37,17 +37,22 @@ class ProductService {
       inquiry.order === "productPrice"
         ? { productPrice: 1 } // pastdan yuqoriga
         : inquiry.order === "latest"
-        ? { createdAt: -1 } // eng so‘ngilari
+        ? { createdAt: -1 } // eng so'ngilari
         : inquiry.order === "bySold"
-        ? { productSoldCount: -1 } // eng ko‘p sotilganlar
+        ? { productSoldCount: -1 } // eng ko'p sotilganlar
         : { createdAt: -1 }; // default
+
+    // Ensure page and limit are valid integers
+    const page = Math.max(1, Math.floor(inquiry.page)) || 1;
+    const limit = Math.max(1, Math.floor(inquiry.limit)) || 10;
+    const skip = (page - 1) * limit;
 
     const result = await this.productModel
       .aggregate([
         { $match: match },
         { $sort: sort },
-        { $skip: (inquiry.page * 1 - 1) * inquiry.limit },
-        { $limit: inquiry.limit * 1 },
+        { $skip: skip },
+        { $limit: limit },
       ])
       .exec();
 

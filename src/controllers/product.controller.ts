@@ -30,10 +30,19 @@ productController.getProducts = async (req: Request, res: Response) => {
   try {
     console.log("getProducts");
     const { page, limit, order, productCollection, search } = req.query;
+    
+    // Provide default values for pagination
+    const pageNum = page ? Number(page) : 1;
+    const limitNum = limit ? Number(limit) : 10;
+    
+    // Validate that page and limit are valid numbers
+    const validPage = isNaN(pageNum) || pageNum < 1 ? 1 : pageNum;
+    const validLimit = isNaN(limitNum) || limitNum < 1 ? 10 : limitNum;
+    
     const inquiry: ProductInquiry = {
-      order: String(order),
-      page: Number(page),
-      limit: Number(limit),
+      order: order ? String(order) : "latest",
+      page: validPage,
+      limit: validLimit,
     };
 
     if (productCollection) {
