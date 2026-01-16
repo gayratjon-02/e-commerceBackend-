@@ -17,31 +17,58 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
-/** 1-ENTERANCE **/
 const app = express();
-app.use(express.static(path.join(__dirname, "public"))); // Traditional api
+
+/**
+ * MUHIM: nginx ortida bo‘lganda
+ * cookie secure / https detection uchun kerak bo‘ladi
+ */
+app.set("trust proxy", 1);
+
+// Static
+app.use(express.static(path.join(__dirname, "public")));
+
+// Uploads (backend ichida real papka: src/../uploads)
+// Domen orqali kelishi: https://exclusiveshop.app/api/uploads/...
+// nginx /api/ -> / ga kesgani uchun backendda bu /uploads/... bo‘lib keladi
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-// app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // REST API
+app.use(express.json());
+
+/**
+ * CORS - production
+ * credentials: true bo‘lsa origin "*" bo‘la olmaydi
+ */
 app.use(
   cors({
     credentials: true,
-    origin: ["https://exclusiveshop.app"],
+    origin: ["https://exclusiveshop.app", "https://www.exclusiveshop.app"],
   })
 );
+
 app.use(cookieParser());
 app.use(morgan(MORGAN_FORMAT));
-/** 2-SESSIONS **/
+
+/**
+ * Session
+ * production uchun secure cookie tavsiya qilinadi.
+ * Agar localda ham ishlatmoqchi bo‘lsangiz NODE_ENV ga qarab qilamiz.
+ */
+const isProd = process.env.NODE_ENV === "production";
+
 app.use(
   session({
     secret: String(process.env.SESSION_SECRET),
-    cookie: {
-      maxAge: 1000 * 3600 * 6, // 6hr
-    },
-    store: store,
-    resave: true, //
+    store,
+    resave: true,
     saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 3600 * 6, // 6h
+      httpOnly: true,
+      secure: isProd, // production: true
+      sameSite: "lax", // ko‘p holatda yetadi
+    },
   })
 );
 
@@ -51,12 +78,12 @@ app.use(function (req, res, next) {
   next();
 });
 
-/** 3-VIEWS **/
+// Views
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-/** 4-ROUTERS **/
-app.use("/admin", routerAdmin); // SSR: EJS
-app.use("/", router); // SPA: REACT
+// Routers
+app.use("/admin", routerAdmin);
+app.use("/", router);
 
 export default app;
