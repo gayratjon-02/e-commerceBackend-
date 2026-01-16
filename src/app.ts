@@ -20,7 +20,7 @@ const store = new MongoDBStore({
 /** 1-ENTERANCE **/
 const app = express();
 app.use(express.static(path.join(__dirname, "public"))); // Traditional api
-app.use("/api/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 // app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // REST API
