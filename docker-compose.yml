@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: ./backend
+    container_name: ecommerce-backend
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+      - MONGO_URL=mongodb+srv://gayratjon02:Gayratjon2002@cluster0.fssdmk5.mongodb.net/ecommerce
+      - SESSION_SECRET=gfdfgkjdhfgkdjufhgd85677dfgdfg
+      - SECRET_TOKEN=DFSDFSDFSDFSDFSDF87SDF67SD65F78S1
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - ./backend/productsImg:/app/productsImg
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: ecommerce-frontend
+    ports:
+      - "4000:3000"
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=http://localhost:3003
+    restart: always
+
+networks:
+  default:
+    name: ecommerce-network
